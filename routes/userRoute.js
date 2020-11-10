@@ -26,7 +26,7 @@ router.get('/', checkAuth, checkAdmin, getAllUsers);
  * @access private
  */
 
-router.put('/:userId/admin', checkAuth, toggleAdmin);
+router.put('/:userId/admin', toggleAdmin);
 
 /** *
  * @route PUT /api/users/password

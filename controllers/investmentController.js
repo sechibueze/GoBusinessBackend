@@ -119,7 +119,7 @@ const updateInvestmentDetails = (req, res) => {
       if (interest) investment.interest = interest;
       // If an investment is edited,
       // Then it must need be approved by admin
-       investment.isVerified = false;
+      investment.isVerified = false;
 
       investment.save((err) => {
         if (err) return res.status(500).json({ status: false, error: 'Could not create a new investment' });
@@ -154,7 +154,7 @@ const getInvestmentByFilter = (req, res) => {
       res.status(200).json({
         status: true,
         message: 'List of Investments on GoBusiness',
-        data
+        data: filter._id ? data[0] : data
       });
     })
     .catch((err) => res.status(500).json({
@@ -220,12 +220,12 @@ const registerInvestment = (req, res) => {
 const getAllInvestmentSubscribers = (req, res) => {
   const { investmentId } = req.params;
   // const currentUserId = req.authUser.id;
-  let filter = {
+  const filter = {
     _id: investmentId
   };
 
-  if(!req.authUser.auth.includes('admin')){
-    filter.owner = req.authUser.id
+  if (!req.authUser.auth.includes('admin')) {
+    filter.owner = req.authUser.id;
   }
 
   Investment.findOne(filter)
@@ -237,7 +237,7 @@ const getAllInvestmentSubscribers = (req, res) => {
     .then((investment) => res.status(200).json({
       status: true,
       message: 'Investment investors list',
-      data: investment
+      data: investment.investors 
     }))
     .catch((err) => res.status(500).json({
       status: false,

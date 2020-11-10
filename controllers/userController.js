@@ -48,8 +48,15 @@ const manageUserPassword = (req, res) => {
 };
 
 const toggleAdmin = (req, res) => {
-  const { userId } = req.params;
-  User.findOne({ _id: userId })
+  const filter = {};
+  const { userId } = req.params; // send email or _id
+  if (userId.includes('@')) {
+    filter.email = userId;
+  } else {
+    filter._id = userId;
+  }
+
+  User.findOne(filter)
     .then((user) => {
       if (!user) {
         res.status(400).json({ status: false, error: 'No such user exists' });
